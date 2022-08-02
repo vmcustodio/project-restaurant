@@ -1,20 +1,9 @@
 <template>
   <div id="app">
-    <CategoryMenu/>
+    <router-view/> <!-- é o que vai gerenciar o que está sendo mostrado -->
   </div>
 </template>
 
-<script>
-import CategoryMenu from './components/CategoryMenu.vue'
-
-export default {
-  name: 'App',
-  components: {
-    CategoryMenu
-  }
-}
-</script>
-
-<style>
-
+<style lang="less">
+#app {}
 </style>
