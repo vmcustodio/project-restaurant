@@ -60,7 +60,8 @@ export default {
 
     @media @tablets {
       flex-wrap: wrap;
-      margin: 20px;
+      margin: 0px;
+      padding: 20px;
     }
   }
 </style>
