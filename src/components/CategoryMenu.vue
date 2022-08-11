@@ -61,6 +61,7 @@ export default {
 
 .category-menu {
   width: 130px;
+  min-width: 130px;
   height: 100vh;
   background: white;
   display: flex;
