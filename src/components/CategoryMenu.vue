@@ -115,7 +115,6 @@ export default {
       display: flex;
       margin: 20px;
       overflow: scroll;
-      justify-content: center;
       
       li {
         min-width: 78px;
