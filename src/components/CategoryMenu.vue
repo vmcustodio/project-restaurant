@@ -22,7 +22,7 @@ import Drinks from '../assets/icons/smothie.svg';
 import Burguer from '../assets/icons/food.svg';
 
 export default {
-  name:' CategoryMenu',
+  name: 'CategoryMenu',
   components: {
     Pizza,
     Combo,

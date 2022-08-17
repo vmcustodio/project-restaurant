@@ -13,10 +13,14 @@
 </template>
 
 <script>
+import Mixin from'@/mixins/mixins';
+
 export default {
   name: 'ItemList',
+  mixins: [Mixin],
   filters: {
     currency(value) {
+      if(!value) return
       return `R$ ${value.toLocaleString('pt-br', {minimumFractionDigits: 2})}`
     }
   },
@@ -25,12 +29,18 @@ export default {
   },
   computed: {
     imagePath() {
+      if(!this.item?.id) return
       return require(`../assets/images/${this.item.id}.png`)
     }
   },
   methods: {
     addToCart() {
-      this.$store.dispatch('addToCart', this.item) // mandando o item inteiro para o carrinho
+      if(this.isDesktop()) {
+        this.$store.dispatch('addToCart', this.item) // mandando o item inteiro para o carrinho apens se for desktop, se nao sera direcionado a outra rota
+        return
+      }
+      // se for mobile =>
+      this.$router.push({ name: 'AddToCart', params: {id: this.item.id}})
     }
   }
 }
