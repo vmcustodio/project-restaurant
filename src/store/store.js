@@ -21,6 +21,9 @@ export const store = new Vuex.Store({
     decreaseQuantity(state, index){
       --state.cartList[index].quantity
     },
+    addObservation(state, { index, observations }) {
+      state.cartList[index].observations = observations
+    },
     removeFromCart(state, index) {
       state.cartList.splice(index, 1) // para ser removido
     }
@@ -35,11 +38,18 @@ export const store = new Vuex.Store({
         commit('addToCart', el);
         return
       }
-      const index = state.cartList.findIndex(cartItem => cartItem.id === el.id); // se já tem o item, é necessario saber qual o seu index pra poder mandar a quantidade e tbm mandar a quantidade
+      const index = state.cartList.findIndex(cartItem => cartItem.id === el.id); // se já tem o item, é necessario saber qual o seu index pra poder mandar a quantidade e tbm aumentar a quantidade
       commit('increaseQuantity', { // sendo mandado um obj pro increaseQuantity que possui o index e tbm a quantidade
         index: index, 
         quantity: el?.quantity || 1
       })
+
+      if(el.observations) {
+        commit('addObservation', {
+          index: index,
+          observations: el.observations
+        })
+      }
       //cartItem ? commit('increaseQuantity', index) : commit('addToCart', el);
     },
     removeFromCart({state, commit}, id) {
@@ -53,6 +63,13 @@ export const store = new Vuex.Store({
     decreaseQuantity({state, commit}, id) {
       const index = state.cartList.findIndex(cartItem => cartItem.id === id);
       commit('decreaseQuantity', index);
+    },
+    addObservation({state, commit}, el) {
+      const index = state.cartList.findIndex(cartItem => cartItem.id === el.id);
+      commit('addObservation', {
+        index: index,
+        observations: el.observations
+      })
     }
   },
   getters: { // pegar alguma coisa do state

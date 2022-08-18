@@ -7,7 +7,7 @@
         <QuantityComponent :item="item" :useStore="false"/> 
       </div>
       <p class="add-cart--observations">Observações:</p>
-      <textarea v-model="observations" rows="10"></textarea>
+      <textarea v-model="item.observations" rows="10"></textarea>
       <button class="primary-button" @click="onAddToCartButtonClick">Adicionar ao carrinho</button>
   </div>
 </template>
@@ -28,12 +28,11 @@ export default {
   data() {
     return {
       item: {},
-      observations: ''
     }
   },
   created() {
     axios.get(`http://localhost:3000/${this.selectedCategory}/${this.id}`).then( (response) => {
-      this.item = {quantity:1, ...response.data}
+      this.item = { quantity: 1, observations: '', ...response.data }
     })
   },
   computed: {
@@ -44,10 +43,9 @@ export default {
   methods: {
     onAddToCartButtonClick() {
       this.$store.dispatch('addToCart', this.item)
-      this.$router.push({name: 'Home'}) // ao clicar em add ao carrinho volta para a tela principal
+      this.$router.push({name: 'home'}) // ao clicar em add ao carrinho volta para a tela principal
     }
   }
-
 }
 </script>
 
