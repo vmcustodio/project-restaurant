@@ -6,8 +6,8 @@
     <ModalComponent :show="showModal">
       <div class="modal-content">
         <h2>Deseja remover esse item do carrinho?</h2>
-        <button class="secondary-button">Cancelar</button>
-        <button class="primary-button">Remover</button>
+        <button class="secondary-button" @click="onCancelButtonClick">Cancelar</button>
+        <button class="primary-button" @click="onRemoveButtonClick">Remover</button>
       </div>
     </ModalComponent>
   </div>
@@ -56,6 +56,16 @@ export default {
       }
       // eslint-disable-next-line vue/no-mutating-props
       ++this.item.quantity;
+    },
+    onCancelButtonClick() {
+      this.increaseQuantity(this.item.id)
+      this.showModal = false
+    },
+    onRemoveButtonClick() {
+      this.showModal = false
+      this.$nextTick(() => {
+        this.$store.dispatch('removeFromCart', this.item.id)
+      }) // só vai fazer isso depois que já atualizou a dom pra fechar a modal
     }
   }
 }
