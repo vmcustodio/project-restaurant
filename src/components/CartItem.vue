@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/no-mutating-props -->
 <template>
   <div class="item">
    <QuantityComponent  :item="item" class="item--quantity"/>
