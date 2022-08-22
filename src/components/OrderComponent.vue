@@ -302,6 +302,22 @@ export default {
       this.triggerValidation();
       if(!this.isUserFormDataValid || !this.isAddressFormValid) return; // se algum dos dados nao forem validos não ira seguir
       this.showSuccessModal = true
+
+      const phone = '5515999999999';
+      let text = `
+        Cliente: ${this.formData.name.value}
+        Contato: ${this.formData.cellphone.value}
+        Pedido: 
+          ${this.$store.state.cartList.map(item => {
+            return `
+              ${item.quantity}x ${item.name}
+              Obs: ${item.observations}
+            `
+          })}
+      `
+
+      text = window.encodeURIComponent(text); // tranforma o text pra pegar a quebra de linha
+      window.open(`https://api.whatsapp.com/send?phone=${phone}&text=${text}`)
     },
     onShowAddressModal() {
       this.showAddressModal = true
