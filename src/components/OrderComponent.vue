@@ -29,9 +29,9 @@
         </div>
       </div>
 
-       <div class="address">
+      <div class="address">
           <p class="section-title">Endereço</p>
-          <div class="delivery-type">
+          <div class="radio-container">
             <div class="radio-options">
               <input 
                 type="radio" 
@@ -54,8 +54,42 @@
               <label for="delivery">Delivery</label>
             </div>
           </div>
+
+          <div class="address-card" v-if="isDeliveryType && hasAddressInfo && savedAddress">
+            <p>{{ formData.city.value }} - {{ formData.cep.value }}</p>
+            <p>{{ formData.street.value }}, {{ formData.number.value }}</p>
+          </div>
+
           <a @click="onShowAddressModal" v-if="isDeliveryType">{{ addressButtonLabel }}</a>
+      </div>
+
+       <div class="payment">
+          <p class="section-title">Pagamento</p>
+          <p>Método de pagamento:</p>
+          <div class="radio-container">
+            <div class="radio-options">
+              <input
+                type="radio"
+                name="payment-type"
+                id="credit-card"
+                value="credit-card"
+                v-model="paymentType"
+              />
+              <label for="credit-card">Cartão</label>
+            </div>
+            <div class="radio-options">
+              <input 
+                type="radio" 
+                name="payment-type" 
+                id="cash" 
+                value="cash" 
+                v-model="paymentType" 
+              />
+              <label for="cash">Dinheiro</label>
+            </div>
+          </div>
         </div>
+
     </form>
     <button class="primary-button" @click="orderItens">Concluir pedido</button>
 
@@ -193,7 +227,9 @@ export default {
         },
       },
       showAddressModal: false,
-      deliveryType: 'store'
+      deliveryType: 'store',
+      savedAddress: false,
+      paymentType: 'credit-cart'
     }
   },
   computed: {
@@ -241,6 +277,7 @@ export default {
     validateAddressForm() {
       this.triggerAddressFormaValidations();
       if(!this.isAddressFormValid) return;
+      this.savedAddress = true;
       this.showAddressModal = false;
     }
   }
@@ -300,11 +337,11 @@ export default {
       margin-bottom: 20px;
     }
 
-    .address {
-      .delivery-type {
-        display: flex;
-      }
+    .radio-container {
+      display: flex;
+    }
 
+    .address {
       a {
         color: @pink;
         font-weight: normal;
@@ -314,6 +351,20 @@ export default {
         margin: 15px 0;
         display: block;
         width: fit-content;
+      }
+
+      .address-card {
+        border-radius : 8px;
+        border: 1px solid @dark-grey;
+        padding: 10px 20px;
+        margin: 15px 0;
+        width: fit-content;
+        p {
+          font-weight: 600;
+          font-size: 14px;
+          color: @dark-grey;
+          margin: 5px 0;
+        } 
       }
     }
 
@@ -341,6 +392,23 @@ export default {
       text-align: center;
       & + button {
         margin-left: 15px;
+      }
+    }
+  }
+
+  @media @tablets {
+    width: 100%;
+    padding: 0;
+
+    .modal-content {
+    button + button {
+        margin-left: 5px;
+      }
+    }
+
+    .address-container {
+      .input-field +.input-field {
+        margin-left: 5px;
       }
     }
   }
