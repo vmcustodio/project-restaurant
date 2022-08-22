@@ -151,11 +151,26 @@
         <button class="primary-button" @click="validateAddressForm">Adicionar</button>
       </div>
     </ModalComponent>
+
+    <ModalComponent :show="showInvalidAddressModal" @on-modal-close="hideInvalidAddressModal">
+      <div class="invalid-address-modal">
+        <span v-html="warningIcon" class="icon"></span>
+        <span>Na modalidade delivery é necessário adicionar um endereço válido para entrega.</span>
+      </div>
+    </ModalComponent>
+
+    <ModalComponent :show="showSuccessModal" @on-modal-close="hideSuccessModal">
+      <div class="success-modal">
+        <span v-html="successIcon" class="icon"></span>
+        <span>Pedido realizado com sucesso.</span>
+      </div>
+    </ModalComponent>
   </div>
 </template>
 
 <script>
 import ModalComponent from '@/components/ModalComponent.vue'
+import feather from 'feather-icons'
 
 export default {
   name: 'OrderComponent',
@@ -227,12 +242,20 @@ export default {
         },
       },
       showAddressModal: false,
+      showInvalidAddressModal: false,
+      showSuccessModal: false,
       deliveryType: 'store',
       savedAddress: false,
       paymentType: 'credit-cart'
     }
   },
   computed: {
+    warningIcon() {
+      return feather.icons['alert-triangle'].toSvg();
+    },
+    successIcon() {
+      return feather.icons['check-circle'].toSvg();
+    },
     isAddressFormValid() {
       let isValid = true;
       isValid &= this.formData.cep.valid;
@@ -240,6 +263,12 @@ export default {
       isValid &= this.formData.street.valid;
       isValid &= this.formData.number.valid;
       return isValid;
+    },
+    isUserFormDataValid() {
+      let isValid = true;
+      isValid &= this.formData.cellphone.valid;
+      isValid &= this.formData.name.valid;
+      return isValid
     },
     isDeliveryType() {
       return this.deliveryType === 'delivery'
@@ -258,6 +287,10 @@ export default {
     triggerValidation() {
       this.formData.name.isValid();
       this.formData.cellphone.isValid();
+      if (this.isDeliveryType) {
+        this.triggerAddressFormaValidations(); // precisa do endereço 
+        this.showInvalidAddressModal = !this.isAddressFormValid; // mostra o modal se nao estiver valido/false
+      }
     },
     triggerAddressFormaValidations() {
       this.formData.cep.isValid();
@@ -267,12 +300,20 @@ export default {
     },
     orderItens() {
       this.triggerValidation();
+      if(!this.isUserFormDataValid || !this.isAddressFormValid) return; // se algum dos dados nao forem validos não ira seguir
+      this.showSuccessModal = true
     },
     onShowAddressModal() {
       this.showAddressModal = true
     },
     hideAddressModal() {
       this.showAddressModal = false
+    },
+    hideInvalidAddressModal() {
+      this.showInvalidAddressModal = false
+    },
+    hideSuccessModal() {
+      this.$router.push({name: 'home'})
     },
     validateAddressForm() {
       this.triggerAddressFormaValidations();
@@ -393,6 +434,17 @@ export default {
       & + button {
         margin-left: 15px;
       }
+    }
+  }
+
+  .invalid-address-modal, .success-modal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding-bottom: 20px;
+    .icon {
+      margin-bottom: 15px;
     }
   }
 
