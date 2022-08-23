@@ -1,12 +1,12 @@
 <template>
   <div class="home">
-    <router-link to="/cart" class="cart-icon" v-if="isSmallScreens()">
+    <router-link to="/cart" class="cart-icon">
       <CartIcon/>
     </router-link>
     
     <CategoryMenu/>
     <ItemsList/>
-    <CartComponent v-if="isDesktop()"/>
+    <CartComponent class="cart-menu"/>
   </div>
 </template>
 
@@ -35,6 +35,17 @@ export default {
   display: flex;
 
   .cart-icon {
+    display: none;
+  }
+
+  @media @small-desktops  {
+    flex-direction: column;
+    
+    .cart-menu {
+      display: none;
+    }
+
+    .cart-icon {
     width: 42px;
     height: 42px;
     background: @pink;
@@ -44,9 +55,6 @@ export default {
     justify-items: center;
     margin: 20px 20px 20px auto;
   }
-
-  @media @tablets {
-    flex-direction: column;
   }
 }
 </style>
